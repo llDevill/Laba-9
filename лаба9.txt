@@ -1,0 +1,55 @@
+#include <stdio.h>
+
+#define N 10
+
+#define MAXLINE 120
+
+int main() {
+
+FILE *fpin = fopen("file.txt", "rt"), *fpout = fopen("file2.txt", "wt");
+
+int i;
+
+char *ptr = NULL;
+
+int ii = 0;
+
+char line[MAXLINE];
+
+while (!feof(fpin))// цикл до конца входного файла
+
+{
+
+ptr = fgets(line, MAXLINE, fpin); // чтение строки
+
+if (ptr == NULL)
+
+break; // файл исчерпан
+
+for (i = 0, ii = 0; (*ptr != '\0')&(i < N); ptr++, i++) { //идем по строке нужное количество N раз
+
+if ((*ptr == ' ') || (*ptr == '\n')) {//если пробел - разделитель слова, то переписываем его
+
+for (int j = ii; j < i; j++)
+
+fprintf(fpout, "%c", line[j]);
+
+ii = i;//сохраняем позицию на пробеле
+
+}
+
+}
+
+if (i == N) fprintf(fpout, "\n"); //если в строке оставались слова, что еще не переписали изза ограничения
+
+for (ii++, ptr = &line[ii]; *ptr != '\0'; ptr++)//то перепишем их с новой строки
+
+fprintf(fpout, "%c", *ptr); //ii++, чтобы избавитьсяот пробелов при переносе на новую строку в файле
+
+}
+
+fclose(fpin);
+
+fclose(fpout);
+
+}
